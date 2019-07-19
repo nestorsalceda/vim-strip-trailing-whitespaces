@@ -1,9 +1,14 @@
 " vim-strip-trailing-whitespaces
-" Author: Néstor Salceda
-" Version: 0.1
+" Author: Néstor Salceda, masukomi
+" Version: 0.2
 
 " http://vimcasts.org/episodes/tidying-whitespace
-function! Preserve(command)
+function! StripTrailingWhitespace(command)
+	" Only strip if the b:noStripeWhitespace variable isn't set
+	if exists('b:noStripWhitespace')
+		return
+	endif
+
 	" Preparation: save last search, and cursor position.
 	let _s=@/
 	let l = line(".")
@@ -15,4 +20,6 @@ function! Preserve(command)
 	call cursor(l, c)
 endfunction
 
-autocmd BufWritePre * :call Preserve("%s/\\s\\+$//e")
+autocmd BufWritePre * :call StripTrailingWhitespace("%s/\\s\\+$//e")
+" example for excluding specific filetypes
+" autocmd FileType ruby,javascript,perl let b:noStripWhitespace=1
